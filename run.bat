@@ -1,0 +1,1 @@
+..\envy\scripts\activate.bat

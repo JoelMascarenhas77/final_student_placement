@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %} 
+
+{% block content %}
+
+    <body class="hold-transition reset-password-page">
+        <div class="reset-password-box">
+            <div class="reset-password-logo">
+                <a href=""><b>Student </b>Placement Prediction System</a>
+            </div>
+            <!-- /.reset-password-logo -->
+            <div class="card">
+                <div class="card-body reset-password-card-body">
+                    <p class="reset-password-box-msg">Reset Your Password</p>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="input-group mb-3">
+                            <input type="email" class="form-control" placeholder="Email" name="email">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-envelope"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary btn-block">Send Password Reset Link</button>
+                        </div>
+                    </form>
+
+                    <!-- Display Messages -->
+                    {% if messages %}
+                    <div class="col-12">
+                        {% for message in messages %}
+                            {% if message.tags == "error" %}
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                    {{ message }}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <div class="col-12 text-center">
+                        <a href="{% url 'login' %}">Back to Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.reset-password-box -->
+    </body>
+
+{% endblock %}

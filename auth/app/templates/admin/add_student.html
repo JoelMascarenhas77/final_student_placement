@@ -1,0 +1,78 @@
+{% extends 'admin/base.html' %}
+
+{% block page_title %}
+    Add Student
+{% endblock page_title %}
+
+{% block main_content %}
+
+{% load static %}
+
+<section class="content">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Add Student</h3>
+                    </div>
+                    <form  method="POST" action="" enctype="multipart/form-data">
+                        
+                        {% csrf_token %}
+                        <div id="files">
+                        {% include 'admin/student_form.html' %}
+                            
+                    </div>
+                       
+                        <!-- /.card-body -->
+
+                        <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">submit</button>
+                        </div>
+                    </form>
+                    </div>
+                    <!-- /.card -->
+
+                </div>
+            </div>
+
+        </div><!-- /.container-fluid -->
+      </section>
+
+  {% endblock main_content %}
+  {% block custom_js %}
+<script>
+  
+
+    $("form").on("input", '[type="file"]', function(event) {
+        let file = event.target.files[0];
+    
+        if (file) {
+            let newImg = $("<img>"); // Create the new img element here
+            let imageUrl = URL.createObjectURL(file);
+    
+            newImg.attr("src", imageUrl);
+            newImg.attr("width", "50");
+       
+    
+            // Append the image to the parent div
+            $(event.target).parent().append(newImg);
+        }
+    });
+    $("form").on("click", 'img', function(event) {
+            
+              (event.target).remove();
+
+        }
+    );
+
+
+
+
+  
+  </script>
+
+  
+  {% endblock custom_js %}

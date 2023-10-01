@@ -1,0 +1,65 @@
+Tables for SPPS
+
+users
+-id
+-email
+-username
+-password(encryption)
+-type(1,2) student and admin
+- date_joined
+
+prediction data
+-pid(foreign)
+-age
+-gender
+-stream
+-internship(number of internships)
+-CGPA
+-Hostel
+-Backlogs
+-Results
+
+student data
+-pid
+-first name
+-last name
+-gender
+-age
+-branch
+-sem
+-div
+-address
+-phone
+-email
+-photo
+-reports(multiple files ya multiple rows)
+-certificates(Same)
+-internships(Same)
+-grade(A,B,C,D) based on prediction
+
+courses/internships
+-id
+-name
+-offered by
+-domain
+-students enrolled
+-level
+-durations
+-Grade(same)
+
+companys
+-id
+-name
+-city
+-positions
+-avg. salary
+-students alloted
+
+feedbacks
+-id
+-feedback
+-reply
+-created_at
+-updated_at
+-student_pid
+
