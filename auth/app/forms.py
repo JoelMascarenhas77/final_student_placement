@@ -46,9 +46,7 @@ class AddStudentForm(forms.Form):
     branch = forms.ChoiceField(label="Branch", choices=branch_list, widget=forms.Select(attrs={"class":"form-control"}))
     semester = forms.ChoiceField(label="Semester", choices=semester_list, widget=forms.Select(attrs={"class":"form-control"}))
     division = forms.ChoiceField(label="Division", choices=division_list, widget=forms.Select(attrs={"class":"form-control"}))
-    cirtificates = forms.FileField(label="Cirtificates", widget=forms.FileInput(attrs={"class":"form-control"}))
-    Internships= forms.FileField(label="Internships", widget=forms.FileInput(attrs={"class":"form-control"}))
-    Reports = forms.FileField(label="Reports", widget=forms.FileInput(attrs={"class":"form-control"}))
+   
                                   
     
     
