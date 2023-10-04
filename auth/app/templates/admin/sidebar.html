@@ -60,7 +60,6 @@
 
             <li class="nav-item">
               {% url 'manage_staff' as manage_staff %}
-              {% url 'edit_staff' staff_id=id as edit_staff %}
               <a href="" class="nav-link">
                 <i class="nav-icon fas fa-chalkboard-teacher"></i>
                 <p>
@@ -81,8 +80,8 @@
 
             
             <li class="nav-item">
-              {% url 'add_staff' as add_staff %}
-              <a href="" class="nav-link">
+              {% url 'prediction' as prediction %}
+              <a href="{% url 'prediction' %}" class="nav-link {% if request.path == prediction %} active {% endif %}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>
                   Student Prediction

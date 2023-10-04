@@ -5,6 +5,7 @@ from django.forms import Form
 class AddStudentForm(forms.Form):
 
     photo = forms.FileField(label="Photo", required=False, widget=forms.FileInput(attrs={"class":"form-control"}))
+    pid = forms.IntegerField(label="PID",  widget=forms.NumberInput(attrs={"class":"form-control"}))
     username = forms.CharField(label="Username", max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
     password = forms.CharField(label="Password", max_length=8, widget=forms.PasswordInput(attrs={"class":"form-control","minlength":"8"}))
     email = forms.EmailField(label="Email", max_length=50, widget=forms.EmailInput(attrs={"class":"form-control"}))
@@ -20,9 +21,10 @@ class AddStudentForm(forms.Form):
     )
 
     branch_list = (
-        ('Computer','Computer'),
+        ('Civil','Civil'),
+        ('Computer Science','Computer Science'),
         ('Information Technology','Information Technology'),
-        ('Electronics & Telecomunication','Electronics & Telecomunication'),
+        ('Electronics & Communication','Electronics & Communication'),
         ('Electrical','Electrical'),
         ('Mechanical','Mechanical')
     )
@@ -34,6 +36,8 @@ class AddStudentForm(forms.Form):
         ('IV','IV'),
         ('V','V'),
         ('VI','VI'),
+        ('VII','VII'),
+        ('VIII','VIII'),
 
     )
     division_list = (
@@ -41,11 +45,21 @@ class AddStudentForm(forms.Form):
         ('B','B')
 
     )
+
+    hostel_list = (
+        ('No','No'),
+        ('Yes','Yes')
+
+    )
+
     gender = forms.ChoiceField(label="Gender", choices=gender_list, widget=forms.Select(attrs={"class":"form-control"}))
+    hostel = forms.ChoiceField(label="Hostel", choices=hostel_list, widget=forms.Select(attrs={"class":"form-control"}))
     address = forms.CharField(label="Address", max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
     branch = forms.ChoiceField(label="Branch", choices=branch_list, widget=forms.Select(attrs={"class":"form-control"}))
     semester = forms.ChoiceField(label="Semester", choices=semester_list, widget=forms.Select(attrs={"class":"form-control"}))
     division = forms.ChoiceField(label="Division", choices=division_list, widget=forms.Select(attrs={"class":"form-control"}))
+
+    
    
                                   
     
