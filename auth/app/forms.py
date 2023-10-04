@@ -6,7 +6,7 @@ class AddStudentForm(forms.Form):
 
     photo = forms.FileField(label="Photo", required=False, widget=forms.FileInput(attrs={"class":"form-control"}))
     username = forms.CharField(label="Username", max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
-    password = forms.CharField(label="Password", max_length=50, widget=forms.PasswordInput(attrs={"class":"form-control"}))
+    password = forms.CharField(label="Password", max_length=8, widget=forms.PasswordInput(attrs={"class":"form-control","minlength":"8"}))
     email = forms.EmailField(label="Email", max_length=50, widget=forms.EmailInput(attrs={"class":"form-control"}))
     first_name = forms.CharField(label="First Name", max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
     last_name = forms.CharField(label="Last Name", max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
