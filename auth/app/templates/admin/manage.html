@@ -71,6 +71,7 @@
                                 <th>Semester</th>
                                 <th>Division</th>
                                 <th>Address</th>
+                                <th>Photo</th>
 
                                 </tr>
                             </thead>
@@ -88,7 +89,7 @@
                                 <td>{{ user.student.semester }}</td>
                                 <td>{{ user.student.divison }}</td>
                                 <td>{{ user.student.address }}</td>
-                                <td> <img src="{{ user.stuent.photo }}" style="width: 100px;" /> </td>
+                                <td> <img src="{{ user.student.photo.url}}" style="width: 100px;" /> </td>
                                 <td>
                                     <a href=" url 'edit_student' student.admin.id " class="btn btn-success">Edit</a> 
                                     <a href=" url 'delete_student' student.admin.id " class="btn btn-danger">Delete</a>

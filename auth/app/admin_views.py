@@ -38,7 +38,6 @@ def add_student(request):
     
 def manage_student(request):   
     users = User.objects.filter(is_admin=False)
-    print(users[0].student.first_name)
     return render(request,"admin/manage.html",{"users":users})
 
 def edit_student(request): 

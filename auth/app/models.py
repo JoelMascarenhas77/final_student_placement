@@ -30,7 +30,7 @@ class student(models.Model):
         semester = models.CharField(max_length=2)
         divison = models.CharField(max_length=1)
         address = models.CharField(max_length=30)
-        photo = models.FileField(upload_to='auth/media/profiles')
+        photo = models.FileField(upload_to='profiles/')
         grade = models.CharField(max_length=30)
 
   
