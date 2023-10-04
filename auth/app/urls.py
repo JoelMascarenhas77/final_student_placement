@@ -14,7 +14,7 @@ urlpatterns = [
 
     path("admin_home/" , admin_views.home ,name = "admin_home"),
     path("admin/add_student/" , admin_views.add_student ,name = "add_student"),   
-    #path("admin_add_student/save_student/" , admin_views.add_student ,name = "save_student"),
+    path("admin/manage_student/" , admin_views.manage_student ,name = "manage_student"),
      
     path("student_home/" , stud_views.home , name = "student_home"),
 

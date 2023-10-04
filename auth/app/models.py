@@ -7,7 +7,7 @@ class MyUserManager(BaseUserManager):
         user = self.model(username=username,email=email)
         user.set_password(password)
         user.save(using=self._db)
-        user.info  = key
+        user.student = key
         return user
 
     def create_superuser(self, username,email, password):

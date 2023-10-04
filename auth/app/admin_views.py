@@ -34,15 +34,15 @@ def add_student(request):
         new_student = User.objects.create_user(key=new_studnent_info,username =U_data[0],password =U_data[1] ,email=U_data[2])
         new_student.save()
     return render(request,"admin/add_student.html",{"form":stud_form})
+
     
-def save_student(request):
-    if request.method =="GET":
-        return HttpResponse("<h1> fail <h1>")
-    
-def edit_studen(request):   
-    users = User.objects.filter()
+def manage_student(request):   
+    users = User.objects.filter(is_admin=False)
+    print(users[0].student.first_name)
+    return render(request,"admin/manage.html",{"users":users})
 
 def edit_student(request): 
+
  pass
 
     
