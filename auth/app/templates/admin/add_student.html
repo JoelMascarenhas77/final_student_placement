@@ -24,10 +24,7 @@
                         
                         {% include 'admin/student_form.html' %}
                             
-                     
-                    <div id="files">
-
-                    </div>
+       
                        
                         <!-- /.card-body -->
 
@@ -45,52 +42,3 @@
       </section>
 
   {% endblock main_content %}
-  {% block custom_js %}
-<script>
-    let file
-    let newImg
-    let imageUrl
-    function files(Id) {
-        const div = $('<div>').attr({'id': Id, 'class': "form-group"}).appendTo('#files');
-        div.append($('<label>').text(Id)) 
-        div.append($('<input>').attr({"class":"form-control",'type': "file","name":Id , "multiple":true}));
-      }
-
-      files("certificate");
-      files("reports");
-      files("internships");
-
-    
-
-    $("form").on("input", '[type="file"]', function(event) {
-     
-    for( let i=0; i<event.target.files.length; i++){
-         file = event.target.files[i];
-        if (file) {
-            newImg = $("<img>"); // Create the new img element here
-            imageUrl = URL.createObjectURL(file);
-    
-            newImg.attr("src", imageUrl);
-            newImg.attr("width", "50");
-       
-    
-            // Append the image to the parent div
-            $(event.target).parent().append(newImg);
-        }
-    }  
-    });
-    $("form").on("click", 'img', function(event) {
-            
-              (event.target).remove();
-
-        }
-    );
-
-
-
-
-  
-  </script>
-
-  
-  {% endblock custom_js %}

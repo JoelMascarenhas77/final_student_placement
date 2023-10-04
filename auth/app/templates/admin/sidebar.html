@@ -38,7 +38,7 @@
 
             <li class="nav-item">
               {% url 'add_student' as add_student %}
-              <a href="{% url 'add_student' %}" class="nav-link {% if request.path == add_student %} active {% endif %}">
+              <a href=" url 'add_student' " class="nav-link {% if request.path == add_student %} active {% endif %}">
                 <i class="nav-icon fas fa-user-graduate"></i>
                 <p>
                   Add Student
@@ -60,17 +60,28 @@
             <li class="nav-item">
               {% url 'manage_staff' as manage_staff %}
               {% url 'edit_staff' staff_id=id as edit_staff %}
-              <a href="" class="nav-link>
+              <a href="" class="nav-link">
                 <i class="nav-icon fas fa-chalkboard-teacher"></i>
                 <p>
                   Manage Placement Record
                 </p>
               </a>
             </li>
+
+            <li class="nav-item">
+              {% url 'add_student' as add_student %}
+              <a href="" class="nav-link">
+                <i class="nav-icon fas fa-chalkboard-teacher"></i>
+                <p>
+                  Manage Courses
+                </p>
+              </a>
+            </li>
+
             
             <li class="nav-item">
               {% url 'add_staff' as add_staff %}
-              <a href="" class="nav-link>
+              <a href="" class="nav-link">
                 <i class="nav-icon fas fa-th"></i>
                 <p>
                   Student Prediction
@@ -79,20 +90,12 @@
             </li>
 
 
-            <li class="nav-item">
-              {% url 'add_student' as add_student %}
-              <a href="">
-                <i class="nav-icon fas fa-th"></i>
-                <p>
-                  Manage Courses
-                </p>
-              </a>
-            </li>
+         
 
            
             <li class="nav-item">
               {% url 'student_feedback_message' as student_feedback_message %}
-              <a href="">
+              <a href="" class="nav-link">
                 <i class="nav-icon fas fa-comments"></i>
                 <p>
                   Student Feedback

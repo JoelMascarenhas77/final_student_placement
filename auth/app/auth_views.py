@@ -19,7 +19,7 @@ def user_login(request):
             if myuser.is_admin==True:    
                 return HttpResponseRedirect('admin_home/')
             else:
-                 return HttpResponseRedirect('stud_home/')
+                 return HttpResponseRedirect('student_home/')
             
     return render(request,"login.html")
 

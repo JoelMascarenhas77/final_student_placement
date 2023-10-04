@@ -16,7 +16,7 @@ urlpatterns = [
     path("admin_add_student/" , admin_views.add_student ,name = "add_student"),   
     #path("admin_add_student/save_student/" , admin_views.add_student ,name = "save_student"),
      
-    path("student_home/" , stud_views.home ,name = "stud_home"),
+    path("student_home/" , stud_views.home , name = "student_home"),
 
 
     

@@ -3,14 +3,14 @@ from django.contrib.auth.models import AbstractBaseUser,BaseUserManager
 
 
 class MyUserManager(BaseUserManager):
-    def create_user(self,username ,email ,key,password=None):
+    def create_user(self,username ,email ,password,key):
         user = self.model(username=username,email=email)
         user.set_password(password)
         user.save(using=self._db)
         user.info  = key
         return user
 
-    def create_superuser(self, username,email, password=None):
+    def create_superuser(self, username,email, password):
       
         user = self.model(username=username,email=email)
         user.set_password(password)
@@ -21,7 +21,7 @@ class MyUserManager(BaseUserManager):
 
       
 
-class student_info(models.Model):
+class student(models.Model):
         first_name = models.CharField(max_length=30)
         last_name = models.CharField(max_length=30)
         gender = models.CharField(max_length=4)
@@ -30,8 +30,12 @@ class student_info(models.Model):
         semester = models.CharField(max_length=2)
         divison = models.CharField(max_length=1)
         address = models.CharField(max_length=30)
-        photo = models.FileField(upload_to='auth/files/profiles')
+        photo = models.FileField(upload_to='auth/media/profiles')
         grade = models.CharField(max_length=30)
+
+  
+
+
 
 
 
@@ -40,7 +44,7 @@ class MyUser(AbstractBaseUser):
     email = models.EmailField(max_length=50, unique=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
-    info = models.ForeignKey(student_info, on_delete=models.CASCADE ,null=True,default=None)
+    student = models.ForeignKey(student, on_delete=models.CASCADE ,null=True,default=None)
 
     objects = MyUserManager()
 
@@ -76,16 +80,16 @@ class feedback(models.Model):
 
 
 class internships(models.Model):
-      internship = models.FileField(upload_to="auth/files/internships")
-      key = models.ForeignKey(student_info, on_delete=models.CASCADE ,null=True,default=None)
+      internship = models.FileField(upload_to="auth/media/internships")
+      key = models.ForeignKey(student, on_delete=models.CASCADE ,null=True,default=None)
       
 class reports(models.Model):
-      repot = models.FileField(upload_to="auth/files/repots")
-      key = models.ForeignKey(student_info, on_delete=models.CASCADE ,null=True,default=None)
+      repot = models.FileField(upload_to="auth/media/repots")
+      key = models.ForeignKey(student, on_delete=models.CASCADE ,null=True,default=None)
       
 class certificates(models.Model):  
-       certificate = models.FileField(upload_to="auth/certificates")
-       key = models.ForeignKey(student_info, on_delete=models.CASCADE ,null=True,default=None)
+       certificate = models.FileField(upload_to="auth/media/certificates")
+       key = models.ForeignKey(student, on_delete=models.CASCADE ,null=True,default=None)
 
         
 
