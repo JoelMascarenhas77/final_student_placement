@@ -1,7 +1,7 @@
 {% extends 'admin/base.html' %}
 
 {% block page_title %}
-    Manage Student
+    Manage Company
 {% endblock page_title %}
 
 {% block main_content %}
@@ -11,7 +11,7 @@
 <section class="content">
     <div class="container-fluid">
 
-        <a class="btn btn-primary" href="{% url 'add_student'%} " role="button">+ Add Student</a> <br/>&nbsp;
+        <a class="btn btn-primary" href="{% url 'add_company'%} " role="button">+ Add Company</a> <br/>&nbsp;
 
         {% if messages %}
             <div class="form-group">
@@ -37,19 +37,19 @@
             </div>
         {% endif %}
 
-        <!-- Add Student Record from File Form -->
+        <!-- Add Company Record from File Form -->
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Add Student Records from File</h3>
+                        <h3 class="card-title">Add Company Records from File</h3>
                     </div>
                     <div class="card-body">
-                        <form method="POST" action="{% url 'add_student_file' %}" enctype="multipart/form-data">
+                        <form method="POST" action="{% url 'add_company_file' %}" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="form-group">
-                                <label for="file_upload">Upload CSV or Excel File:</label>
-                                <input type="file" name="file_upload" class="form-control-file" id="file_upload">
+                                <label for="company_file_upload">Upload CSV or Excel File:</label>
+                                <input type="file" name="company_file_upload" class="form-control-file" id="company_file_upload">
                             </div>
                             <button type="submit" class="btn btn-primary">Upload File</button>
                         </form>
@@ -57,46 +57,36 @@
                 </div>
             </div>
         </div>
-        <!-- End Add Student Record from File Form -->
+        <!-- End Add Company Record from File Form -->
 
-        <!-- Display Student Records from the Database -->
+        <!-- Display Company Records from the Database -->
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Student Details</h3>
+                        <h3 class="card-title">Company Details</h3>
                     </div>
                     <div class="card-body table-responsive p-0">
                         <table class="table table-hover text-nowrap">
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Username</th>
-                                    <th>Email</th>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Gender</th>
-                                    <th>Age</th>
-                                    <th>Branch</th>
-                                    <th>Semester</th>
-                                    <th>Division</th>
-                                    <th>Address</th>
+                                    <th>Name</th>
+                                    <th>City</th>
+                                    <th>Positions</th>
+                                    <th>Salary</th>
+                                    <th>Students Allotted</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for student in students %}
+                                {% for company in companies %}
                                 <tr>
-                                    <td>{{ student.pid }}</td>
-                                    <td>{{ student.username }}</td>
-                                    <td>{{ student.email }}</td>
-                                    <td>{{ student.first_name }}</td>
-                                    <td>{{ student.last_name }}</td>
-                                    <td>{{ student.gender }}</td>
-                                    <td>{{ student.age }}</td>
-                                    <td>{{ student.branch }}</td>
-                                    <td>{{ student.semester }}</td>
-                                    <td>{{ student.division }}</td>
-                                    <td>{{ student.address }}</td>
+                                    <td>{{ company.id }}</td>
+                                    <td>{{ company.name }}</td>
+                                    <td>{{ company.city }}</td>
+                                    <td>{{ company.positions }}</td>
+                                    <td>{{ company.salary }}</td>
+                                    <td>{{ company.students_allotted }}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -105,7 +95,7 @@
                 </div>
             </div>
         </div>
-        <!-- End Display Student Records from the Database -->
+        <!-- End Display Company Records from the Database -->
 
     </div><!-- /.container-fluid -->
 </section>
