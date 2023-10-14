@@ -71,8 +71,6 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Username</th>
-                                    <th>Email</th>
                                     <th>First Name</th>
                                     <th>Last Name</th>
                                     <th>Gender</th>
@@ -81,14 +79,13 @@
                                     <th>Semester</th>
                                     <th>Division</th>
                                     <th>Address</th>
+                                    <th>Action</th> <!-- Add Action Column for Delete Button -->
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for student in students %}
                                 <tr>
                                     <td>{{ student.pid }}</td>
-                                    <td>{{ student.username }}</td>
-                                    <td>{{ student.email }}</td>
                                     <td>{{ student.first_name }}</td>
                                     <td>{{ student.last_name }}</td>
                                     <td>{{ student.gender }}</td>
@@ -97,6 +94,12 @@
                                     <td>{{ student.semester }}</td>
                                     <td>{{ student.division }}</td>
                                     <td>{{ student.address }}</td>
+                                    <td>
+                                        <form method="post" action="{% url 'delete_student' student.pid %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                        </form>
+                                    </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>

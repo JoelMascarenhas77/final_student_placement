@@ -12,6 +12,7 @@ urlpatterns = [
     path("admin_home/", admin_views.home, name="admin_home"),
     path("admin/add_student/", admin_views.add_student, name="add_student"),
     path("admin/manage_student/", admin_views.manage_student, name="manage_student"),
+    path('delete_student/<int:student_pid>/', admin_views.delete_student, name='delete_student'),
     #path("admin/manage_comapny/", admin_views.manage_company, name="manage_company"),
     path("student_home/", stud_views.home, name="student_home"),
     path("admin/prediction/", admin_views.prediction, name="prediction"),
