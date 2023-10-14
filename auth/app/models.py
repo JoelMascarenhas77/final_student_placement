@@ -1,21 +1,28 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 class MyUserManager(BaseUserManager):
-    def create_user(self, username, email, password, key):
-        user = self.model(username=username, email=email)
+    def create_user(self, username, email, password, **extra_fields):
+        if not email:
+            raise ValueError('The Email field must be set')
+        email = self.normalize_email(email)
+        user = self.model(username=username, email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
-        user.student = key
         return user
 
     def create_superuser(self, username, email, password):
-        user = self.model(username=username, email=email)
-        user.set_password(password)
+        user = self.create_user(
+            username=username,
+            email=email,
+            password=password
+        )
         user.is_admin = True
         user.save(using=self._db)
         return user
-
+    
 class Student(models.Model):
     pid = models.IntegerField( primary_key=True)
     first_name = models.CharField(max_length=30)
@@ -30,21 +37,21 @@ class Student(models.Model):
     photo = models.FileField(upload_to='profiles/')
     grade = models.CharField(max_length=30)
 
-class MyUser(AbstractBaseUser):
+class MyUser(AbstractBaseUser, PermissionsMixin):
     student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True, default=None)
     username = models.CharField(max_length=30, unique=True)
     email = models.EmailField(max_length=50, unique=True)
     is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)  # Use is_admin for admin access
 
     objects = MyUserManager()
 
     USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ['email']
+    REQUIRED_FIELDS = ["email"]
 
-    def __str__(self):  
+    def __str__(self):
         return self.username
-
+    
 class Result(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     cgpa = models.DecimalField(max_digits=4, decimal_places=2)

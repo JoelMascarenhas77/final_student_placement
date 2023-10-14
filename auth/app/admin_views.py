@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from .forms import AddStudentForm
@@ -30,7 +30,7 @@ def add_student(request):
             semester=S_data[8], division=S_data[9]
         )
         new_student_info.save()
-        new_student = User.objects.create_user(key=new_student_info, username=U_data[0], password=U_data[1], email=U_data[2])
+        new_student = User.objects.create_user(username=U_data[0], password=U_data[1], email=U_data[2], student=new_student_info)
         new_student.save()
     return render(request, "admin/add_student.html", {"form": stud_form})
 
@@ -62,10 +62,22 @@ def add_student_file(request):
                         'division': row['division'],
                     }
 
-                    new_student_info = Student(**student_data)
-                    new_student_info.save()
+                    # Extract 'username', 'password', and 'email' directly from the row
+                    username = row['username']
+                    password = str(row['password'])
+                    email = row['email']
 
-                messages.success(request, "Student records added successfully from the file.")
+                    new_student_info = Student(
+                        pid=student_data['pid'], first_name=student_data['first_name'],
+                        last_name=student_data['last_name'], age=student_data['age'], gender=student_data['gender'],
+                        hostel=student_data['hostel'], address=student_data['address'], branch=student_data['branch'],
+                        semester=student_data['semester'], division=student_data['division']
+                    )
+                    new_student_info.save()
+                    new_student = User.objects.create_user(username=username, password=password, email=email, student=new_student_info)
+
+                    new_student.save()
+                messages.success(request, "Student records and users added successfully from the file.")
             except Exception as e:
                 messages.error(request, f"An error occurred while processing the file: {str(e)}")
 
@@ -74,6 +86,23 @@ def add_student_file(request):
 def manage_student(request):
     users = User.objects.filter(is_admin=False)
     return render(request, "admin/manage.html", {"users": users})
+
+def delete_student(request, student_pid):
+    if request.method == 'POST':
+        student = get_object_or_404(Student, pid=student_pid)
+        
+        # Delete the associated login record in MyUser model
+        user = User.objects.filter(student=student)
+        if user.exists():
+            user.delete()
+        
+        # Delete the student record
+        student.delete()
+        
+        # Add a success message
+        messages.success(request, "Student record and associated login deleted successfully.")
+    
+    return redirect('manage_student')
 
 def edit_student(request, student_id):
     pass
