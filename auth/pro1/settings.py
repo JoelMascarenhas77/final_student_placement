@@ -34,14 +34,14 @@ AUTH_USER_MODEL = "app.Myuser"
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'joseph.mascarenhas@student.sfit.ac.in'
+EMAIL_HOST_USER = 'joel.mascarenhas737@outlook.com'
 EMAIL_HOST_PASSWORD = 'JM@#123saw'
 EMAIL_PORT = 587
 # Application definition
 
 INSTALLED_APPS = [
     "app.apps.AppConfig",
-    "django.contrib.admin",
+    #"django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",

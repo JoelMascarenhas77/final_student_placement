@@ -5,5 +5,6 @@ from django.http import HttpResponseRedirect,HttpResponse
 
 
 def home(request):
-    return render(request,"student/home.html")
+    user = request.user.student
+    return render(request,"student/home.html",{"user":user})
 

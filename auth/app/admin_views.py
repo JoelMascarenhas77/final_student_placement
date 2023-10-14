@@ -72,8 +72,8 @@ def add_student_file(request):
     return redirect('manage_student')
 
 def manage_student(request):
-    students = Student.objects.all()
-    return render(request, "admin/manage.html", {"students": students})
+    users = User.objects.filter(is_admin=False)
+    return render(request, "admin/manage.html", {"users": users})
 
 def edit_student(request, student_id):
     pass

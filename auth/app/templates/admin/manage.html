@@ -84,19 +84,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for student in students %}
+                                {% for user in users %}
                                 <tr>
-                                    <td>{{ student.pid }}</td>
-                                    <td>{{ student.username }}</td>
-                                    <td>{{ student.email }}</td>
-                                    <td>{{ student.first_name }}</td>
-                                    <td>{{ student.last_name }}</td>
-                                    <td>{{ student.gender }}</td>
-                                    <td>{{ student.age }}</td>
-                                    <td>{{ student.branch }}</td>
-                                    <td>{{ student.semester }}</td>
-                                    <td>{{ student.division }}</td>
-                                    <td>{{ student.address }}</td>
+                                    <td>{{ user.student.pid }}</td>
+                                    <td>{{ user.username }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>{{ user.student.first_name }}</td>
+                                    <td>{{ user.student.last_name }}</td>
+                                    <td>{{ user.student.gender }}</td>
+                                    <td>{{ user.student.age }}</td>
+                                    <td>{{ user.student.branch }}</td>
+                                    <td>{{ user.student.semester }}</td>
+                                    <td>{{ user.student.division }}</td>
+                                    <td>{{ user.student.address }}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>

@@ -23,9 +23,14 @@
                                 </div>
                             </div>
                         </div>
-
+                        
+                        <!-- Add OTP input field -->
+                        <div class="input-group mb-3" id="otp-input" style="display: none;">
+                            <input type="text" class="form-control" placeholder="5-digit OTP" name="otp" pattern="[0-9]{5}" required>
+                        </div>
+                        
                         <div class="col-12">
-                            <button type="submit" class="btn btn-primary btn-block">Send Password Reset Link</button>
+                            <button type="submit" class="btn btn-primary btn-block" id="send-otp-button">Send OTP</button>
                         </div>
                     </form>
 
@@ -52,6 +57,15 @@
             </div>
         </div>
         <!-- /.reset-password-box -->
+
+        <script>
+            document.getElementById('send-otp-button').addEventListener('click', function() {
+                // Display the OTP input field when the "Send OTP" button is clicked
+                document.getElementById('otp-input').style.display = 'block';
+                // Hide the "Send OTP" button
+                this.style.display = 'none';
+            });
+        </script>
     </body>
 
 {% endblock %}

@@ -17,7 +17,7 @@ class MyUserManager(BaseUserManager):
         return user
 
 class Student(models.Model):
-    pid = models.IntegerField(primary_key=True)
+    pid = models.IntegerField( primary_key=True)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     gender = models.CharField(max_length=4)
@@ -125,13 +125,13 @@ class Feedback(models.Model):
     updated_at = models.DateField(default=0)
 
 class Internship(models.Model):
-    internship = models.FileField(upload_to="auth/media/internships")
+    internship = models.FileField(upload_to="internships")
     key = models.ForeignKey(Student, on_delete=models.CASCADE, null=True, default=None)
 
 class Report(models.Model):
-    report = models.FileField(upload_to="auth/media/reports")  # Corrected field name
+    report = models.FileField(upload_to="reports")  # Corrected field name
     key = models.ForeignKey(Student, on_delete=models.CASCADE, null=True, default=None)
 
 class Certificate(models.Model):  
-    certificate = models.FileField(upload_to="auth/media/certificates")
+    certificate = models.FileField(upload_to="certificates")
     key = models.ForeignKey(Student, on_delete=models.CASCADE, null=True, default=None)
