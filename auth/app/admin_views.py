@@ -84,22 +84,112 @@ def add_student_file(request):
     return redirect('manage_student')
 
 def manage_student(request):
-    users = User.objects.filter(is_admin=False)
-    return render(request, "admin/manage.html", {"users": users})
+    students = Student.objects.all() 
+    return render(request, "admin/manage.html", {"students": students})
+import pandas as pd
+
+def add_company_file(request):
+    if request.method == 'POST':
+        file_upload = request.FILES.get('file_upload')
+
+        if file_upload:
+            try:
+                if file_upload.name.endswith('.csv'):
+                    df = pd.read_csv(file_upload)
+                elif file_upload.name.endswith(('.xls', '.xlsx')):
+                    df = pd.read_excel(file_upload)
+                else:
+                    messages.error(request, "Unsupported file format.")
+                    return redirect('manage_student')
+
+                # Remove commas from the 'salary' column
+                df['students'] = df['students'].astype(str).str.replace(',', '', regex=True).astype(int)
+                df['salary'] = df['salary'].str.replace(',', '').astype(int)
+
+                for _, row in df.iterrows():
+                    company_data = {
+                        'id': row['id'],
+                        'name': row['name'],
+                        'city': row['city'],
+                        'position': row['position'],
+                        'salary': int(row['salary']),
+                        'students': int(row['students']),
+                    }
+
+                    new_company_info = Company(
+                        id=company_data['id'], name=company_data['name'],
+                        city=company_data['city'], positions=company_data['position'], salary=company_data['salary'],
+                        students_allotted=company_data['students']
+                    )
+                    new_company_info.save()
+                messages.success(request, "Company records added successfully from the file.")
+            except Exception as e:
+                messages.error(request, f"An error occurred while processing the file: {str(e)}")
+
+    return redirect('manage_company')
+
+
+
+def manage_company(request):
+    companies = Company.objects.all()
+    return render(request, "admin/manage_company.html", {"companies": companies})
+
+def add_course_file(request):
+    if request.method == 'POST':
+        file_upload = request.FILES.get('file_upload')
+
+        if file_upload:
+            try:
+                if file_upload.name.endswith('.csv'):
+                    df = pd.read_csv(file_upload)
+                elif file_upload.name.endswith(('.xls', '.xlsx')):
+                    df = pd.read_excel(file_upload)
+                else:
+                    messages.error(request, "Unsupported file format.")
+                    return redirect('manage_course')
+
+                # Remove commas from the 'students_enrolled' column
+                df['students_enrolled'] = df['students_enrolled'].astype(str).str.replace(',', '', regex=True).astype(int)
+
+
+                for _, row in df.iterrows():
+                    course_data = {
+                        'name': row['name'],
+                        'company': row['company'],
+                        'level': row['level'],
+                        'duration': row['duration'],
+                        'domain': row['domain'],
+                        'students_enrolled': int(row['students_enrolled']),
+                    }
+
+                    new_course_info = CourseInternship(
+                        name=course_data['name'],
+                        company=course_data['company'],
+                        level=course_data['level'],
+                        duration=course_data['duration'],
+                        domain=course_data['domain'],
+                        students_enrolled=course_data['students_enrolled'],
+                    )
+                    new_course_info.save()
+                messages.success(request, "Course records added successfully from the file.")
+            except Exception as e:
+                messages.error(request, f"An error occurred while processing the file: {str(e)}")
+
+    return redirect('manage_course')
+
+
+def manage_course(request):
+    course = CourseInternship.objects.all()
+    return render(request, "admin/manage_course.html", {"course": course})
 
 def delete_student(request, student_pid):
     if request.method == 'POST':
         student = get_object_or_404(Student, pid=student_pid)
-        
-        # Delete the associated login record in MyUser model
+    
         user = User.objects.filter(student=student)
         if user.exists():
             user.delete()
-        
-        # Delete the student record
         student.delete()
-        
-        # Add a success message
         messages.success(request, "Student record and associated login deleted successfully.")
     
     return redirect('manage_student')

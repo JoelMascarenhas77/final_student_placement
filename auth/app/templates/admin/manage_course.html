@@ -1,7 +1,7 @@
 {% extends 'admin/base.html' %}
 
 {% block page_title %}
-    Manage Company
+    Manage Courses/Internships
 {% endblock page_title %}
 
 {% block main_content %}
@@ -39,10 +39,10 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Add Company Records from File</h3>
+                        <h3 class="card-title">Add Course Records from File</h3>
                     </div>
                     <div class="card-body">
-                        <form method="POST" action="{% url 'add_company_file' %}" enctype="multipart/form-data">
+                        <form method="POST" action="{% url 'add_course_file' %}" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="form-group">
                                 <label for="file_upload">Upload CSV or Excel File:</label>
@@ -54,14 +54,14 @@
                 </div>
             </div>
         </div>
-        <!-- End Add Company Record from File Form -->
+        <!-- End Add Course Record from File Form -->
 
-        <!-- Display Company Records from the Database -->
+        <!-- Display Course Records from the Database -->
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Company Details</h3>
+                        <h3 class="card-title">Course Details</h3>
                     </div>
                     <div class="card-body table-responsive p-0">
                         <table class="table table-hover text-nowrap">
@@ -69,21 +69,23 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Name</th>
-                                    <th>City</th>
-                                    <th>Position</th>
-                                    <th>Salary</th>
-                                    <th>Students Allotted</th>
+                                    <th>Company</th>
+                                    <th>Level</th>
+                                    <th>Duration</th>
+                                    <th>Domain</th>
+                                    <th>Student Enrolled</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for company in companies %}
+                                {% for course in course %}
                                 <tr>
-                                    <td>{{ company.id }}</td>
-                                    <td>{{ company.name }}</td>
-                                    <td>{{ company.city }}</td>
-                                    <td>{{ company.positions }}</td>
-                                    <td>{{ company.salary }}</td>
-                                    <td>{{ company.students_allotted }}</td>
+                                    <td>{{ course.id }}</td>
+                                    <td>{{ course.name }}</td>
+                                    <td>{{ course.company }}</td>
+                                    <td>{{ course.level }}</td>
+                                    <td>{{ course.duration }}</td>
+                                    <td>{{ course.domain }}</td>
+                                    <td>{{ course.students_enrolled }}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
