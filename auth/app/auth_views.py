@@ -77,8 +77,5 @@ def reset_password(request):
     return render(request,"reset.html",{"val":"0"})
 
 
-
-
-
 def new_password(request):
     return HttpResponse()

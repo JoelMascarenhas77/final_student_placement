@@ -111,10 +111,10 @@ class Prediction(models.Model):
 class CourseInternship(models.Model):
     name = models.CharField(max_length=30)
     company = models.CharField(max_length=30)
-    students_enrolled = models.IntegerField(default=0)
     level = models.CharField(max_length=30)
-    durations = models.CharField(max_length=30)
-    grade = models.CharField(max_length=1)
+    duration = models.CharField(max_length=30)
+    domain = models.CharField(max_length=30)
+    students_enrolled = models.IntegerField(default=0)
 
 class Company(models.Model):
     name = models.CharField(max_length=30)
@@ -141,3 +141,14 @@ class Report(models.Model):
 class Certificate(models.Model):  
     certificate = models.FileField(upload_to="certificates")
     key = models.ForeignKey(Student, on_delete=models.CASCADE, null=True, default=None)
+
+class Placement(models.Model):
+    pid = models.ForeignKey(Student, on_delete=models.CASCADE)
+    company_name = models.CharField(max_length=100)
+    salary = models.IntegerField()
+    position = models.CharField(max_length=100)
+    PLACEMENT_TYPES = (
+        ('incampus', 'In Campus Placement'),
+        ('outside', 'Outside Placement'),
+    )
+    placement_type = models.CharField(max_length=10, choices=PLACEMENT_TYPES, default='incampus')
