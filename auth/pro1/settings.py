@@ -32,11 +32,13 @@ AUTH_USER_MODEL = "app.Myuser"
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'smtp-mail.outlook.com'
 EMAIL_HOST_USER = 'joel.mascarenhas737@outlook.com'
 EMAIL_HOST_PASSWORD = 'JM@#123saw'
-EMAIL_PORT = 587
+DEFAULT_FROM_EMAIL='joel.mascarenhas737@outlook.com'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -57,6 +59,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "app.authMiddleware.LoginCheckMiddleWare",
 ]
 
 ROOT_URLCONF = "pro1.urls"
@@ -135,3 +138,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'app/media/')  
 MEDIA_URL = '/media/'
+
+

@@ -1,14 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.contrib.auth import login,logout, authenticate
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect,HttpResponse
-from django.contrib.auth import get_user_model
 from django.core.mail import EmailMessage
+from django.contrib import messages
+from datetime import datetime, timedelta
 from . import helpfun
-from django.http import HttpResponse
-import datetime
-
-
+from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
@@ -34,24 +31,54 @@ def user_logout(requset):
 
 
 def reset_password(request):
+    
+    print(request.method)
     if request.method == "POST":
-        usermail =request.POST['email']
-        otp = helpfun.otp(5)
-        email = EmailMessage('Student password reset',  opt , to=[usermail])
-        email.send()
+        if 'email-form' in request.POST:
+            email=request.POST['email']
+            try:
+                user = User.objects.get(email = email)
+            except:
+                messages.error(request,"user does not exist")
+                return render(request,"reset.html",{"val":"0"})
+            otp = str(helpfun.otp(5))
+            try:
+                email = EmailMessage('Student password reset', otp , to=[email])
+                email.send()
+            except: 
+                messages.error(request,"email could not be sent")
+                return render(request,"reset.html",{"val":"0"})
 
-        otp = helpfun.hash(otp)
-        response = render(request,"reset.html")
-        response.set_cookie('my_cookie_name', 'cookie_value', expires=datetime.datetime.now() + datetime.timedelta(days=30), path='/')
+             
+            response = render(request,"reset.html",{"val":"1"})
+            expiration_time = datetime.now() + timedelta(minutes=10)
+            response.set_cookie('otp', helpfun.hash(otp), expires=expiration_time)
+            response.set_cookie('email', email, expires=expiration_time)
+            return response
         
+        if 'otp-form' in request.POST:
+            
+            otp=request.POST['otp']
+            sentotp = request.COOKIES.get('otp')
+            if helpfun.hash(otp) == sentotp:
+                return render(request,"password.html")
+            
+            messages.error(request,"wrong otp")
+            return render(request,"reset.html",{"val":"1"})
         
-    return render(request,"reset.html")
+        if 'password-form' in request.POST:
+
+            password = request.POST['confirm_password']
+            email = request.COOKIES.get(email)
+            user = User.objects.get(email = email)
+            user.set_password(password)
+            return redirect('login')
+        
+    return render(request,"reset.html",{"val":"0"})
 
 
-def set_cookie_view(request):
-    response = HttpResponse("Cookie set successfully!")
-    response.set_cookie('my_cookie_name', 'cookie_value', expires=datetime.datetime.now() + datetime.timedelta(days=30), path='/')
-    return response
 
 
 
+def new_password(request):
+    return HttpResponse()

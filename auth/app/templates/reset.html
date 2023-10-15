@@ -1,19 +1,19 @@
 {% extends 'base.html' %}
-{% load static %} 
+{% load static %}
 
 {% block content %}
-
     <body class="hold-transition reset-password-page">
         <div class="reset-password-box">
             <div class="reset-password-logo">
                 <a href=""><b>Student </b>Placement Prediction System</a>
             </div>
-            <!-- /.reset-password-logo -->
+            
             <div class="card">
                 <div class="card-body reset-password-card-body">
                     <p class="reset-password-box-msg">Reset Your Password</p>
-
-                    <form method="post">
+                    
+                    {% if val == "0" %}
+                    <form id="email-form" method="POST">
                         {% csrf_token %}
                         <div class="input-group mb-3">
                             <input type="email" class="form-control" placeholder="Email" name="email">
@@ -24,32 +24,40 @@
                             </div>
                         </div>
                         
-                        <!-- Add OTP input field -->
-                        <div class="input-group mb-3" id="otp-input" style="display: none;">
-                            <input type="text" class="form-control" placeholder="5-digit OTP" name="otp" pattern="[0-9]{5}" required>
-                        </div>
-                        
                         <div class="col-12">
-                            <button type="submit" class="btn btn-primary btn-block" id="send-otp-button">Send OTP</button>
+                            <button type="submit" class="btn btn-primary btn-block" name="email-form">Send OTP</button>
                         </div>
                     </form>
-
-                    <!-- Display Messages -->
-                    {% if messages %}
-                    <div class="col-12">
-                        {% for message in messages %}
-                            {% if message.tags == "error" %}
-                                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
-                                    {{ message }}
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
                     {% endif %}
-
+                   
+                 
+                    {% if val == "1" %}
+                    <form id="otp-form" method="POST" >
+                        {% csrf_token %}
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="5-digit OTP" name="otp" pattern="[0-9]{5}" >
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-success btn-block" name="otp-form">Verify OTP</button>
+                        </div>
+                    </form>
+                    {% endif %}
+                    <!-- Display Messages -->
+                    {% if messages %} 
+                        <div class="col-12">
+                            {% for message in messages %}
+                                {% if message.tags == "error" %}
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                        {{ message }}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    <input type="hidden" value="{{ value }}" id="verify">
                     <div class="col-12 text-center">
                         <a href="{% url 'login' %}">Back to Login</a>
                     </div>
@@ -58,14 +66,8 @@
         </div>
         <!-- /.reset-password-box -->
 
-        <script>
-            document.getElementById('send-otp-button').addEventListener('click', function() {
-                // Display the OTP input field when the "Send OTP" button is clicked
-                document.getElementById('otp-input').style.display = 'block';
-                // Hide the "Send OTP" button
-                this.style.display = 'none';
-            });
-        </script>
+  
+        
     </body>
-
 {% endblock %}
+    

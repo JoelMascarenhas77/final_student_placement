@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 class MyUserManager(BaseUserManager):
     def create_user(self, username, email, password, **extra_fields):
@@ -43,7 +42,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=50, unique=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)  # Use is_admin for admin access
-
+    is_superuser = models.BooleanField(default=False)
     objects = MyUserManager()
 
     USERNAME_FIELD = "username"

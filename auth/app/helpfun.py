@@ -5,7 +5,7 @@ import hashlib
 # Generate a 5-digit random number as a string
 def otp (length):
     random_number = ''.join(secrets.choice('0123456789') for _ in range(length))
-    return length
+    return random_number
 
 
 

@@ -1,0 +1,58 @@
+{% extends 'student/base.html' %}
+
+{% block page_title %}
+    Result
+{% endblock page_title %}
+
+{% block main_content %}
+
+{% load static %}
+
+<section class="content">
+        <div class="container-fluid">
+
+            
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Prediction Result</h3>
+                        </div>
+
+                        <div class="card-body">
+                           <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                    <tr>
+                                        <th>#ID</th>
+                                        <th>First_name</th>
+                                        <th>Result</th>
+    
+                                    </tr>
+                                    </thead>
+                                    
+                                    
+                                    <tr>
+                                        <td>{{ user.pid }}</td>
+                                        <td>{{ user.first_name }}</td>
+                                        <td>{{ user.result }}</td>
+
+                                    </tr>
+                                   
+                                </table>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /.container-fluid -->
+      </section>
+
+  {% endblock main_content %}
+
+{% block custom_js %}
+
+{% endblock custom_js %}

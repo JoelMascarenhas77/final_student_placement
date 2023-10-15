@@ -7,4 +7,7 @@ from django.http import HttpResponseRedirect,HttpResponse
 def home(request):
     user = request.user.student
     return render(request,"student/home.html",{"user":user})
-
+ 
+def prediction(request):
+    user = request.user.student
+    return render(request,"student/prediction.html",{"user":user})
