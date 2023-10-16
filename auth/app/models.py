@@ -132,15 +132,15 @@ class Feedback(models.Model):
 
 
 class Internship(models.Model):
-    internship = models.FileField(upload_to="internships")
+    file = models.FileField(upload_to="internships")
     key = models.ForeignKey(Student, on_delete=models.CASCADE, null=True, default=None)
 
 class Report(models.Model):
-    report = models.FileField(upload_to="reports")  # Corrected field name
+    file = models.FileField(upload_to="reports")  # Corrected field name
     key = models.ForeignKey(Student, on_delete=models.CASCADE, null=True, default=None)
 
 class Certificate(models.Model):  
-    certificate = models.FileField(upload_to="certificates")
+    file = models.FileField(upload_to="certificates")
     key = models.ForeignKey(Student, on_delete=models.CASCADE, null=True, default=None)
 
 class Placement(models.Model):

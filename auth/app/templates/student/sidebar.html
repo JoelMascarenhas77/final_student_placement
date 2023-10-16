@@ -50,10 +50,10 @@
 
             <li class="nav-item">
               {% url 'student_apply_leave' as student_apply_leave %}
-              <a href="{% url 'student_prediction' %}" class="nav-link {% if request.path == student_apply_leave %} active {% endif %}">
+              <a href="{% url 'add_certificates' %}" class="nav-link {% if request.path == student_apply_leave %} active {% endif %}">
                 <i class="nav-icon fas fa-envelope-open-text"></i>
                 <p>
-                  Manage Certificates
+                  Add certificates
                   {% comment %} <span class="right badge badge-danger">New</span> {% endcomment %}
                 </p>
               </a>

@@ -25,7 +25,9 @@ urlpatterns = [
 
     path("student_home/", stud_views.home, name="student_home"),
     path("student/prediction/", stud_views.prediction, name="student_prediction"),
-    path("student/feedback/", stud_views.feedback, name="student_feedback")
+    path("student/feedback/", stud_views.feedback, name="student_feedback"),
+     path("student/add_certificates/", stud_views.add_certificates, name="add_certificates"),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

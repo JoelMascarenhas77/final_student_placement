@@ -1,0 +1,65 @@
+{% extends 'student/base.html' %}
+
+{% block page_title %}
+    Add Subject
+{% endblock page_title %}
+
+{% block main_content %}
+
+{% load static %}
+
+<section class="content">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Add Subject</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form role="form" method="POST" action="" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="card-body" id="files" >
+
+                        </div>
+                        <!-- /.card-body -->
+
+                        <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">Add Subject</button>
+                        </div>
+                    </form>
+                    </div>
+                    <!-- /.card -->
+
+                </div>
+            </div>
+
+        </div><!-- /.container-fluid -->
+      </section>
+   
+  {% endblock main_content %}
+
+
+  {% block custom_js %}
+  <script>
+
+    $(document).ready(function() {
+        function files(Id) {
+            const div = $('<div>').attr({'id': Id, 'class': "form-group"}).appendTo('#files');
+            div.append($('<label>').text(Id)) 
+            div.append($('<input>').attr({"class":"form-control",'type': "file","name":Id , "multiple":true }));
+        }
+
+        files("certificates");
+        files("reports");
+        files("internships");
+    });
+
+  </script>
+{% endblock custom_js %}
+
+

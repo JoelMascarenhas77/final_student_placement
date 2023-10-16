@@ -5,6 +5,7 @@ from django.core.mail import EmailMessage
 from django.contrib import messages
 from datetime import datetime, timedelta
 from . import helpfun
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -20,7 +21,8 @@ def user_login(request):
                 return HttpResponseRedirect('admin_home/')
             else:
                  return HttpResponseRedirect('student_home/')
-            
+        else:
+            messages.error("user invalid")
     return render(request,"login.html")
 
 
