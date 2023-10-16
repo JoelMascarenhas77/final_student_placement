@@ -1,6 +1,8 @@
 from django import forms 
 from django.forms import Form
 
+from .models import CourseInternship,StudentCourseInternship,Report,Student
+
 
 class AddStudentForm(forms.Form):
 
@@ -58,6 +60,33 @@ class AddStudentForm(forms.Form):
     branch = forms.ChoiceField(label="Branch", choices=branch_list, widget=forms.Select(attrs={"class":"form-control"}))
     semester = forms.ChoiceField(label="Semester", choices=semester_list, widget=forms.Select(attrs={"class":"form-control"}))
     division = forms.ChoiceField(label="Division", choices=division_list, widget=forms.Select(attrs={"class":"form-control"}))
+
+class CertificateForm(forms.ModelForm):
+    domain = forms.ChoiceField(choices=[], required=False)
+    certificates = forms.FileField()
+
+    def __init__(self, *args, **kwargs):
+        super(CertificateForm, self).__init__(*args, **kwargs)
+        domains = CourseInternship.objects.values_list('domain', flat=True).distinct()
+        domain_choices = [(domain, domain) for domain in domains]
+        
+        domain_choices.insert(0, ('Other', 'Other'))
+        
+        self.fields['domain'].choices = domain_choices
+
+    class Meta:
+        model = StudentCourseInternship
+        fields = ('domain','certificates')
+
+class ReportForm(forms.ModelForm):
+    cgpa = forms.DecimalField()
+    backlogs = forms.IntegerField()
+    reports = forms.FileField()
+
+    class Meta:
+        model = Report
+        fields = ('cgpa', 'backlogs', 'reports')
+
 
     
    

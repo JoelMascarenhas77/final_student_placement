@@ -3,10 +3,11 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from .forms import AddStudentForm
 from .models import *
+from django.db.models import Avg, Sum
 from . import helpfun
 import pandas as pd
-import pickle
-from .models import Feedback,Company
+import pickle,joblib
+from django.conf import settings
 from django.http import HttpResponse
 
 User = get_user_model()
@@ -210,36 +211,101 @@ def delete_student(request, student_pid):
 def edit_student(request, student_id):
     pass
 
-def prediction(request):
-   ''' with open('model.pkl', 'rb') as model_file:
-        model = pickle.load(model_file)
 
-    if request.method == 'POST' and 'prediction' in request.POST:
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from .models import Student, Report, Prediction
+import joblib
+from django.conf import settings
+
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from .models import Student, Report, Prediction, Certificate
+import joblib
+from django.conf import settings
+from django.db.models import Avg, Sum, Count  # Import the necessary functions
+
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from .models import Student, Report, Prediction, Certificate
+import joblib
+from django.conf import settings
+from django.db.models import Avg, Sum, Count  # Import the necessary functions
+
+def update_prediction(request):
+    # Load the machine learning model (replace 'your_model.pkl' with the actual model file)
+    model = joblib.load(settings.MODEL_PATH)
+
+    try:
+        # Get all students from the database
+        students = Student.objects.all()
+        Prediction.objects.filter(student__in=students).delete()
+
+        # Map gender, stream, and hostel to numerical values
+        gender_mapping = {'Female': 0, 'Male': 1}
+        stream_mapping = {
+            'Civil': 1,
+            'Information Technology': 2,
+            'Electrical': 3,
+            'Electronics And Communication': 4,
+            'Mechanical': 5,
+            'Computer Science': 6,
+        }
+        hostel_mapping = {'No': 0, 'Yes': 1}
+
+        # Create a list to store prediction results
+        prediction_results = []
+
+        for student in students:
+            report = Report.objects.filter(key=student)
+
+            # Prepare the input data for prediction
+            age = student.age
+            gender = gender_mapping.get(student.gender, 0)
+            stream = stream_mapping.get(student.branch, 0)
+            
+            # Calculate the average CGPA and sum of backlogs for the student
+            cgpa = report.aggregate(Avg('cgpa'))['cgpa__avg']
+            backlog = report.aggregate(Sum('backlogs'))['backlogs__sum']
+
+            # Calculate the count of certificates for the student
+            internship = Certificate.objects.filter(key=student).aggregate(Count('id'))['id__count']
+
+            hostel = hostel_mapping.get(student.hostel, 0)
+
+            # Perform the prediction
+            prediction_result = model.predict([[age, gender, stream, cgpa, backlog, internship, hostel]])
+
+            # Save the prediction result to the "Prediction" table
+            prediction = Prediction.objects.create(
+                student=student,
+                age=age,
+                gender=gender,
+                stream=stream,
+                cgpa=cgpa,
+                backlogs=backlog,
+                hostel=hostel,
+                internship=internship,
+                results=prediction_result[0]  # Assuming the model returns a single result
+            )
+            prediction_results.append(prediction)
+
+        # Retrieve the predictions to pass to the template
         predictions = Prediction.objects.all()
 
-        for prediction in predictions:
-            features = [
-                prediction.age,
-                prediction.gender,
-                prediction.stream,
-                prediction.cgpa,
-                prediction.hostel,
-                prediction.backlogs,
-            ]
+        # Set a success message
+        messages.success(request, "Predictions updated for all students.")
 
-            try:
-                predicted_result = model.predict([features])[0]
-                prediction.results = predicted_result
-                prediction.save()
-            except Exception as e:
-                messages.error(request, f"An error occurred during prediction: {str(e)}")
+    except Student.DoesNotExist:
+        messages.error(request, "Student not found.")
 
-        return redirect('prediction')
+    # Pass predictions to the template context
+    context = {
+        'predictions': predictions
+    }
 
-    predictions = Prediction.objects.all()
+    return render(request, 'admin/prediction.html', context)
 
-    return render(request, 'admin/prediction.html', {'predictions': predictions})'''
-   return render(request, 'admin/prediction.html')
 
 
 def feedback(request):
@@ -252,3 +318,53 @@ def feedback(request):
         feedback.save()
         return HttpResponse("True")
     return render(request,"admin/feedback.html",{"feedbacks":feedbacks})
+
+
+def add_placement_file(request):
+    if request.method == 'POST':
+        file_upload = request.FILES.get('file_upload')
+
+        if file_upload:
+            try:
+                if file_upload.name.endswith('.csv'):
+                    df = pd.read_csv(file_upload)
+                elif file_upload.name.endswith(('.xls', '.xlsx')):
+                    df = pd.read_excel(file_upload)
+                else:
+                    messages.error(request, "Unsupported file format.")
+                    return redirect('manage_placement')
+
+                # Ensure 'salary' is read as a string, replace commas, and convert to integer
+                df['salary'] = df['salary'].astype(str).str.replace(',', '', regex=True).astype(int)
+
+                for _, row in df.iterrows():
+                    placement_data = {
+                        'pid': row['pid'],
+                        'company_name': row['company_name'],
+                        'position': row['position'],
+                        'salary': row['salary'],
+                        'placement_type': row['placement_type'],  # Include placement_type
+                    }
+
+                    new_placement = Placement(
+                        pid_id=placement_data['pid'],
+                        company_name=placement_data['company_name'],
+                        position=placement_data['position'],
+                        salary=placement_data['salary'],
+                        placement_type=placement_data['placement_type'],  # Assign placement_type
+                    )
+                    new_placement.save()
+                messages.success(request, "Placement records added successfully from the file.")
+            except Exception as e:
+                messages.error(request, f"An error occurred while processing the file: {str(e)}")
+
+    return redirect('manage_placement')
+
+
+def manage_placement(request):
+    placements = Placement.objects.all()
+    for placement in placements:
+        placement.student_name = placement.pid.first_name + " " + placement.pid.last_name # Assuming "name" is the field in the Student model you want to display
+
+    return render(request, "admin/manage_placement.html", {"placements": placements})
+

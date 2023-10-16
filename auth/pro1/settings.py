@@ -139,4 +139,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'app/media/')  
 MEDIA_URL = '/media/'
 
+from django.conf import settings
+
+# Define the path to your model.pkl file
+MODEL_PATH = os.path.join(BASE_DIR, 'model.pkl')
+
+
 
