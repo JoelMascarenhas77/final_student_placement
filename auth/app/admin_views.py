@@ -6,6 +6,7 @@ from .models import *
 from . import helpfun
 import pandas as pd
 import pickle
+from .models import Feedback
 
 User = get_user_model()
 
@@ -138,3 +139,12 @@ def prediction(request):
     return render(request, 'admin/prediction.html', {'predictions': predictions})'''
    return render(request, 'admin/prediction.html')
 
+
+def feedback(request):
+    feedbacks = Feedback.objects.all()
+    if request.method == "POST":
+        id =request.POST['id']
+        reply= request.POST['reply']
+        feedback = Feedback.objects.get(id = id)
+        feedback.reply = reply
+    return render(request,"admin/feedback.html",{"feedbacks":feedbacks})
