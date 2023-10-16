@@ -7,6 +7,7 @@ from . import helpfun
 import pandas as pd
 import pickle
 from .models import Feedback
+from django.http import HttpResponse
 
 User = get_user_model()
 
@@ -237,4 +238,6 @@ def feedback(request):
         reply= request.POST['reply']
         feedback = Feedback.objects.get(id = id)
         feedback.reply = reply
+        feedback.save()
+        return HttpResponse("True")
     return render(request,"admin/feedback.html",{"feedbacks":feedbacks})

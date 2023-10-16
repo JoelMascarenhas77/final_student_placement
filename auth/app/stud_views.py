@@ -23,12 +23,10 @@ def feedback(request):
     feedbacks=Feedback.objects.filter(Student_id=request.user.id)
     if request.method == "POST":
         the_user = User.objects.get(id   = request.user.id)
-        print(request.user.id)
-        print(the_user)
-        print(request.user)
+
         the_user.save()
         feedback_message= request.POST['feedback_message']
-        feedback = Feedback( feedback=feedback_message, created_at= datetime.now(),Student_id = the_user)
+        feedback = Feedback( feedback=feedback_message, created_at= datetime.now(),Student = the_user)
         feedback.save()
        
 
