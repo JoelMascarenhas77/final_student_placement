@@ -6,13 +6,24 @@ from .models import *
 from . import helpfun
 import pandas as pd
 import pickle
-from .models import Feedback
+from .models import Feedback,Company
 from django.http import HttpResponse
 
 User = get_user_model()
 
 def home(request):
-    return render(request, "admin/home.html")
+    students_count = Student.objects.all().count()
+    company_count=   Company.objects.all().count()
+    course_count = CourseInternship.objects.all().count()
+    courses = ["mechanical","civil","electronics"]
+  
+    context={
+        "student_count": students_count ,
+        "company_count": company_count,
+        "course_count": course_count,
+    }
+    return render(request, "admin/home.html",context)
+    
 
 def add_student(request):
     stud_form = AddStudentForm()

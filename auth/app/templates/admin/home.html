@@ -10,7 +10,7 @@
               <!-- small box -->
               <div class="small-box bg-info">
                 <div class="inner">
-                  <h3>{{ all_student_count }}</h3>
+                  <h3>{{student_count}}</h3>
 
                   <p>Total Students</p>
                 </div>
@@ -25,9 +25,9 @@
               <!-- small box -->
               <div class="small-box bg-danger">
                 <div class="inner">
-                  <h3>{{ staff_count }}</h3>
+                  <h3>{{student_count}}</h3>
 
-                  <p>Total Associated Companies</p>
+                  <p>Associated Companies</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-stats-bars"></i>
@@ -39,9 +39,9 @@
             
             <div class="col-lg-3 col-6">
               <!-- small box -->
-              <div class="small-box bg-warning">
+              <div class="small-box bg-danger"  style="background-color: yellow;">
                 <div class="inner">
-                  <h3>{{ course_count }}</h3>
+                  <h3>{{student_count}}</h3>
 
                   <p>Total Courses</p>
                 </div>
@@ -58,7 +58,7 @@
                 <div class="inner">
                   <h3>{{ subject_count }}</h3>
 
-                  <p>Placements Year 2022-23</p>
+                  <p>Total Internships</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-stats-bars"></i>
@@ -84,7 +84,7 @@
                   </div>
                 </div>
                 <div class="card-body">
-                  <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                  <canvas id="" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                 </div>
                 <!-- /.card-body -->
               </div>
@@ -128,7 +128,7 @@
                   </div>
                 </div>
                 <div class="card-body">
-                  <canvas id="pieChart2" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                  <canvas id="prediction_chart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                 </div>
                 <!-- /.card-body -->
                 </div>
@@ -147,7 +147,7 @@
                   </div>
                 </div>
                 <div class="card-body">
-                  <canvas id="pieChart3" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                  <canvas id="" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                 </div>
                 <!-- /.card-body -->
             </div>
@@ -165,36 +165,68 @@
   {% block custom_js %}
 
   <script>
-    window.onload = function () {
-      var chart = new CanvasJS.Chart("chartContainer",
-      {
-        title:{
-          text: "Doughnut Chart with Legend"
-        },
-        legend: {
-          horizontalAlign: "right",
-          verticalAlign: "center"
-        },
-        data: [
-        {
-         showInLegend: true,
-         type: "pie ",
-         dataPoints: [
-         {  y: 36, name: "Apple", legendText: "apple" },
-         {  y: 17, name: "Mango", legendText: "mango" },
-         {  y: 16, name: "Orange", legendText: "orange" },
-         {  y: 9, name: "Butter Fruit", legendText: "butter fruit" },
-         {  y: 8, name: "Grapes", legendText: "grapes" },
-         {  y: 7, name: "Melons", legendText: "melons" },
-         { y: 7, name: "Pineapple", legendText: "pineapple"}
-  
-         ]
-       }
-       ]
-     });
-  
-      chart.render();
-    }
+
+    //char 1
+    const data = {
+      labels: [
+        'Mech',
+        'Civil',
+        'EXTC',
+        'CMPN',
+        'IT',
+        'EE',
+      ],
+      datasets: [{
+        label: 'My First Dataset',
+        data: [300, 50, 100],
+        backgroundColor: [
+          'rgb(255, 99, 132)',
+          'rgb(54, 162, 235)',
+          'rgb(255, 205, 86)'
+        ],
+        hoverOffset: 4
+      }]
+    };
+
+    
+    const config = {
+      type: 'doughnut',
+      data: data,
+    };
+    const ctx = document.getElementById('prediction_chart').getContext('2d');
+    const myPieChart = new Chart(ctx, config);
+
+    //char 2
+    const data2 = {
+      labels: [
+        'Red',
+        'Blue',
+        'Yellow'
+      ],
+      datasets: [{
+        label: 'My First Dataset',
+        data: [300, 50, 100],
+        backgroundColor: [
+          'rgb(255, 99, 132)',
+          'rgb(54, 162, 235)',
+          'rgb(255, 205, 86)'
+        ],
+        hoverOffset: 4
+      }]
+    };
+
+    
+    const config2 = {
+      type: 'doughnut',
+      data: data1,
+    };
+    const ctx2 = document.getElementById('AvilableCourses_chart').getContext('2d');
+    const myPieChart2 = new Chart(ctx2, config);
+
+
+
+
+
   </script>
 
   {% endblock custom_js %}

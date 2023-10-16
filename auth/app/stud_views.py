@@ -10,6 +10,8 @@ User = get_user_model()
 
 def home(request):
     user = request.user.student
+  
+
     return render(request,"student/home.html",{"user":user})
  
 def prediction(request):
