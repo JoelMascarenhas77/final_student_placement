@@ -59,7 +59,7 @@
             </li>
 
             <li class="nav-item">
-              {% url 'manage_staff' as manage_staff %}
+              {% url 'manage_placement' as manage_placement %}
               <a href="" class="nav-link">
                 <i class="nav-icon fas fa-chalkboard-teacher"></i>
                 <p>
@@ -69,16 +69,27 @@
             </li>
 
             <li class="nav-item">
-              {% url 'add_student' as add_student %}
-              <a href="" class="nav-link">
-                <i class="nav-icon fas fa-chalkboard-teacher"></i>
+              {% url 'manage_company' as manage_company %}
+              
+              <a href="{% url 'manage_company' %}" class="nav-link {% if request.path == manage_company %} active {% endif %}">
+                <i class="nav-icon fas fa-building"></i>
                 <p>
-                  Manage Courses
+                  Manage Company Records
                 </p>
               </a>
             </li>
 
-            
+            <li class="nav-item">
+              {% url 'manage_course' as manage_course %}
+              
+              <a href="{% url 'manage_course' %}" class="nav-link {% if request.path == manage_course %} active {% endif %}">
+                <i class="nav-icon fas fa-book"></i>
+                <p>
+                  Manage Course Records
+                </p>
+              </a>
+            </li>
+             
             <li class="nav-item">
               {% url 'prediction' as prediction %}
               <a href="{% url 'prediction' %}" class="nav-link {% if request.path == prediction %} active {% endif %}">
@@ -88,10 +99,6 @@
                 </p>
               </a>
             </li>
-
-
-         
-
            
             <li class="nav-item">
               {% url 'student_feedback_message' as student_feedback_message %}
