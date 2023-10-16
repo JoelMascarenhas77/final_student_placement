@@ -18,10 +18,14 @@ urlpatterns = [
     path("student_home/", stud_views.home, name="student_home"),
     path("admin/prediction/", admin_views.prediction, name="prediction"),
     path("admin/add_student_file/", admin_views.add_student_file, name="add_student_file"), 
+    path("admin/feedback/", admin_views.feedback, name="admin_feedback"),
+
     path('add_company_file/', admin_views.add_company_file, name='add_company_file'),
-    path('add_course_file/', admin_views.add_course_file, name='add_course_file')
+    path('add_course_file/', admin_views.add_course_file, name='add_course_file'),
 
-
+    path("student_home/", stud_views.home, name="student_home"),
+    path("student/prediction/", stud_views.prediction, name="student_prediction"),
+    path("student/feedback/", stud_views.feedback, name="student_feedback")
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

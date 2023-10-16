@@ -46,7 +46,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     objects = MyUserManager()
 
     USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ["email"]
+    REQUIRED_FIELDS = ["email"] 
 
     def __str__(self):
         return self.username
@@ -124,11 +124,12 @@ class Company(models.Model):
     students_allotted = models.IntegerField(default=0)
 
 class Feedback(models.Model):
-    info = models.ForeignKey(MyUser, on_delete=models.CASCADE, null=True, default=None)
     feedback = models.CharField(max_length=200)
     reply = models.CharField(max_length=200)
-    created_at = models.DateField(max_length=30)
-    updated_at = models.DateField(default=0)
+    created_at = models.DateField( null=True,default=None)
+    updated_at = models.DateField( null=True,default=None)
+    Student = models.ForeignKey(MyUser, on_delete=models.CASCADE, null=True)
+
 
 class Internship(models.Model):
     internship = models.FileField(upload_to="internships")
