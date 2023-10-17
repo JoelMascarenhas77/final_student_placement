@@ -15,14 +15,11 @@ urlpatterns = [
     path('delete_student/<int:student_pid>/', admin_views.delete_student, name='delete_student'),
     path("admin/manage_comapny/", admin_views.manage_company, name="manage_company"),
     path("admin/manage_course/", admin_views.manage_course, name="manage_course"),
-    path("student_home/", stud_views.home, name="student_home"),
     path("admin/prediction/", admin_views.update_prediction, name="prediction"),
     path("admin/add_student_file/", admin_views.add_student_file, name="add_student_file"), 
     path("admin/feedback/", admin_views.feedback, name="admin_feedback"),
-
     path('add_company_file/', admin_views.add_company_file, name='add_company_file'),
     path('add_course_file/', admin_views.add_course_file, name='add_course_file'),
-
     path("student_home/", stud_views.home, name="student_home"),
     path("student/prediction/", stud_views.prediction, name="student_prediction"),
     path("student/feedback/", stud_views.feedback, name="student_feedback"),
@@ -32,9 +29,7 @@ urlpatterns = [
     path("student/update_profile_picture/", stud_views.update_profile_picture, name="update_profile_picture"),
     path('add_placement_file/', admin_views.add_placement_file, name='add_placement_file'),
     path('manage_placement/', admin_views.manage_placement, name='manage_placement'),
-
-
-
 ]
+
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

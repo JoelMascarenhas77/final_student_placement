@@ -13,7 +13,12 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <div class="image">
-            <img src="{{ user.photo.url }}" class="img-circle elevation-2" alt="User Image">
+            {% if user.photo %}
+                <img src="{{ user.photo.url }}" class="img-circle elevation-2" alt="User Image">
+            {% else %}
+                <!-- Add a path to a default/random image if the user doesn't have a photo -->
+                <img src="{% static 'https://cdn-icons-png.flaticon.com/512/666/666201.png' %}" class="img-circle elevation-2" alt="User Image">
+            {% endif %}
           </div>
           <div class="info">
             <a href="" class="d-block">{{ user.first_name }} {{ user.last_name }}</a>

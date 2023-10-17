@@ -11,19 +11,46 @@ from django.conf import settings
 from django.http import HttpResponse
 
 User = get_user_model()
-
 def home(request):
     students_count = Student.objects.all().count()
-    company_count=   Company.objects.all().count()
+    company_count = Company.objects.all().count()
     course_count = CourseInternship.objects.all().count()
-    courses = ["mechanical","civil","electronics"]
-  
-    context={
-        "student_count": students_count ,
+
+    # Chart 1: Current Prediction Chart
+    prediction_data = Prediction.objects.values('results').annotate(count=models.Count('results'))
+
+    prediction_labels = ['Positive', 'Negative']
+    prediction_values = [data['count'] for data in prediction_data]
+
+    # Chart 2: Available Courses Chart
+    course_data = CourseInternship.objects.values('domain').annotate(count=Count('domain'))
+    course_labels = [data['domain'] for data in course_data]
+    course_values = [data['count'] for data in course_data]
+
+    # Chart 3: Company Vacancies Types
+    company_vacancies = Company.objects.values('name').annotate(count=Count('positions'))
+
+    # Chart 4: Most Engaging Courses
+    engaging_courses_data = CourseInternship.objects.annotate(enroll_count=Count('students_enrolled')).order_by('-enroll_count')[:5]
+    engaging_course_labels = [course.name for course in engaging_courses_data]
+    engaging_course_values = [course.enroll_count for course in engaging_courses_data]
+
+    context = {
+        "student_count": students_count,
         "company_count": company_count,
         "course_count": course_count,
+        "prediction_labels": prediction_labels,
+        "prediction_values": prediction_values,
+        "course_labels": course_labels,
+        "course_values": course_values,
+        "company_vacancies": company_vacancies,
+        "engaging_course_labels": engaging_course_labels,
+        "engaging_course_values": engaging_course_values,
     }
-    return render(request, "admin/home.html",context)
+
+    return render(request, "admin/home.html", context)
+
+
     
 
 def add_student(request):
