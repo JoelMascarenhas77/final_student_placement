@@ -70,43 +70,18 @@ class Result(models.Model):
         )
         result.save()
 
+from django.db import models
+
 class Prediction(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     age = models.IntegerField()
-    gender = models.IntegerField()  # 1 for male, 0 for female
-    stream = models.IntegerField()  # 1 for Civil, 2 for IT, 3 for Electrical, etc.
-    cgpa = models.DecimalField(max_digits=4, decimal_places=2)  
-    hostel = models.BooleanField()  # 0 for no, 1 for yes
+    gender = models.CharField(max_length=4)
+    stream = models.CharField(max_length=30)
+    internship = models.IntegerField()
+    cgpa = models.DecimalField(max_digits=4, decimal_places=2)
+    hostel = models.CharField(max_length=3)
     backlogs = models.IntegerField()
-    results = models.IntegerField()
-
-    @classmethod
-    def create_prediction(cls, student):
-        results = Result.objects.filter(student=student)
-        student_info = student
-
-        avg_cgpa = results.aggregate(avg_cgpa=models.Avg('cgpa'))['avg_cgpa']
-        sum_backlogs = results.aggregate(sum_backlogs=models.Sum('backlog'))['sum_backlogs']
-
-        # Create a Prediction instance
-        prediction = cls(
-            student=student,
-            age=student_info.age,
-            gender=1 if student_info.gender == 'Male' else 0,
-            stream={
-                'Civil': 1,
-                'Information Technology': 2,
-                'Electrical': 3,
-                'Electronics And Communication': 4,
-                'Mechanical': 5,
-                'Computer Science': 6,
-            }[student_info.branch],
-            cgpa=avg_cgpa,
-            hostel=1 if student_info.hostel == 'Yes' else 0,
-            backlogs=sum_backlogs,
-            results=0
-        )
-        prediction.save()
+    results = models.CharField(max_length=30)
 
 class CourseInternship(models.Model):
     name = models.CharField(max_length=30)
@@ -131,15 +106,23 @@ class Feedback(models.Model):
     Student = models.ForeignKey(MyUser, on_delete=models.CASCADE, null=True)
 
 
-class Internship(models.Model):
-    file = models.FileField(upload_to="internships")
+class StudentCourseInternship(models.Model):
+    name = models.CharField(max_length=30)
+    company = models.CharField(max_length=30)
+    level = models.CharField(max_length=30)
+    duration = models.CharField(max_length=30)
+    domain = models.CharField(max_length=30)
+    applied = models.BooleanField(default=False) 
     key = models.ForeignKey(Student, on_delete=models.CASCADE, null=True, default=None)
 
 class Report(models.Model):
-    file = models.FileField(upload_to="reports")  # Corrected field name
+    cgpa = models.DecimalField(max_digits=4, decimal_places=2)
+    backlogs = models.IntegerField()
+    file = models.FileField(upload_to="reports")  
     key = models.ForeignKey(Student, on_delete=models.CASCADE, null=True, default=None)
 
 class Certificate(models.Model):  
+    domain = models.CharField(max_length=50)
     file = models.FileField(upload_to="certificates")
     key = models.ForeignKey(Student, on_delete=models.CASCADE, null=True, default=None)
 
@@ -153,3 +136,9 @@ class Placement(models.Model):
         ('outside', 'Outside Placement'),
     )
     placement_type = models.CharField(max_length=10, choices=PLACEMENT_TYPES, default='incampus')
+
+    def get_pid(self):
+        return "pid"
+
+    def get_pid_value(self):
+        return self.pid_id

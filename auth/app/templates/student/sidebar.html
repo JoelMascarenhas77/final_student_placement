@@ -49,22 +49,22 @@
             </li>
 
             <li class="nav-item">
-              {% url 'student_apply_leave' as student_apply_leave %}
-              <a href="{% url 'add_certificates' %}" class="nav-link {% if request.path == student_apply_leave %} active {% endif %}">
+              {% url 'add_certificates' as add_certificates %}
+              <a href="{% url 'add_certificates' %}" class="nav-link {% if request.path == add_certificates %} active {% endif %}">
                 <i class="nav-icon fas fa-envelope-open-text"></i>
                 <p>
-                  Add certificates
+                  Add Achievements
                   {% comment %} <span class="right badge badge-danger">New</span> {% endcomment %}
                 </p>
               </a>
             </li>
 
             <li class="nav-item">
-              {% url 'student_apply_leave' as student_apply_leave %}
-              <a href="{{ student_apply_leave }}" class="nav-link {% if request.path == student_apply_leave %} active {% endif %}">
-                <i class="nav-icon fas fa-envelope-open-text"></i>
+              {% url 'manage_courses' as manage_courses %}
+              <a href="{{ manage_courses }}" class="nav-link {% if request.path == manage_courses %} active {% endif %}">
+                <i class="nav-icon fas fa-book"></i>
                 <p>
-                  Manage Internships
+                  Manage Courses
                   {% comment %} <span class="right badge badge-danger">New</span> {% endcomment %}
                 </p>
               </a>

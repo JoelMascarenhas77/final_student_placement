@@ -19,6 +19,8 @@ urlpatterns = [
     path("admin/prediction/", admin_views.prediction, name="prediction"),
     path("admin/add_student_file/", admin_views.add_student_file, name="add_student_file"),
     path("admin/edit_student/<int:student_pid>", admin_views.edit_student, name="edit_student"),  
+    path("admin/prediction/", admin_views.update_prediction, name="prediction"),
+    path("admin/add_student_file/", admin_views.add_student_file, name="add_student_file"), 
     path("admin/feedback/", admin_views.feedback, name="admin_feedback"),
 
     path('add_company_file/', admin_views.add_company_file, name='add_company_file'),
@@ -28,6 +30,14 @@ urlpatterns = [
     path("student/prediction/", stud_views.prediction, name="student_prediction"),
     path("student/feedback/", stud_views.feedback, name="student_feedback"),
     path("student/add_certificates/", stud_views.add_certificates, name="add_certificates"),
+    path("student/add_certificates/", stud_views.add_certificates_and_reports, name="add_certificates"),
+    path("student/manage_courses/", stud_views.manage_courses, name="manage_courses"),
+    path("student/apply_course/", stud_views.apply_course, name="apply_course"),
+    path("student/update_profile_picture/", stud_views.update_profile_picture, name="update_profile_picture"),
+    path('add_placement_file/', admin_views.add_placement_file, name='add_placement_file'),
+    path('manage_placement/', admin_views.manage_placement, name='manage_placement'),
+
+
 
 ]
 

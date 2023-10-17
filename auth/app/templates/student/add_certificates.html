@@ -1,65 +1,81 @@
 {% extends 'student/base.html' %}
 
 {% block page_title %}
-    Add Subject
+    Upload Achievements
 {% endblock page_title %}
 
 {% block main_content %}
+    {% load static %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
 
-{% load static %}
-
-<section class="content">
+    <section class="content">
         <div class="container-fluid">
-
+            {% if messages %}
+                <div class="form-group">
+                    <div class="col-12">
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
             <div class="row">
                 <div class="col-md-12">
-                    <!-- general form elements -->
-                    <div class="card card-primary">
-                    <div class="card-header">
-                        <h3 class="card-title">Add Subject</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <!-- form start -->
-                    <form role="form" method="POST" action="" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        
-                        <div class="card-body" id="files" >
-
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Upload Certificates</h3>
                         </div>
-                        <!-- /.card-body -->
-
-                        <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">Add Subject</button>
+                        <div class="card-body">
+                            <form method="POST" action="{% url 'add_certificates' %}" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{ certificate_form.non_field_errors }}
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        {{ certificate_form.domain.label_tag }}
+                                        {{ certificate_form.domain }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ certificate_form.certificates.label_tag }}
+                                        {{ certificate_form.certificates }}
+                                    </div>
+                                </div>
+                                <button type="submit" name="certificate_submit" class="btn btn-primary">Upload Certificate</button>
+                            </form>
                         </div>
-                    </form>
                     </div>
-                    <!-- /.card -->
-
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Upload Reports</h3>
+                        </div>
+                        <div class="card-body">
+                            <form method="POST" action="{% url 'add_certificates' %}" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{ report_form.non_field_errors }}
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        {{ report_form.cgpa.label_tag }}
+                                        {{ report_form.cgpa }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ report_form.backlogs.label_tag }}
+                                        {{ report_form.backlogs }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ report_form.reports.label_tag }}
+                                        {{ report_form.reports }}
+                                    </div>
+                                </div>
+                                <button type="submit" name="report_submit" class="btn btn-primary">Upload Report</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-        </div><!-- /.container-fluid -->
-      </section>
-   
-  {% endblock main_content %}
-
-
-  {% block custom_js %}
-  <script>
-
-    $(document).ready(function() {
-        function files(Id) {
-            const div = $('<div>').attr({'id': Id, 'class': "form-group"}).appendTo('#files');
-            div.append($('<label>').text(Id)) 
-            div.append($('<input>').attr({"class":"form-control",'type': "file","name":Id , "multiple":true }));
-        }
-
-        files("certificates");
-        files("reports");
-        files("internships");
-    });
-
-  </script>
-{% endblock custom_js %}
-
-
+        </div>
+    </section>
+{% endblock main_content %}

@@ -78,6 +78,7 @@
                             <th>Branch</th>
                             <th>Semester</th>
                             <th>Division</th>
+                            <th>Hostel</th>
                             <th>Address</th>
                             <th>Action</th>  <!-- Add a new column for the Delete button -->
                         </tr>
@@ -93,6 +94,7 @@
                             <td>{{ student.branch }}</td>
                             <td>{{ student.semester }}</td>
                             <td>{{ student.division }}</td>
+                            <td>{{ student.hostel }}</td>
                             <td>{{ student.address }}</td>
                             <td>
                                    <a href="{% url 'edit_student' student.pid %}" class="btn btn-success">Edit</a> 

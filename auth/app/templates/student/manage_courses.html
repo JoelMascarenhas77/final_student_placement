@@ -1,0 +1,100 @@
+{% extends 'student/base.html' %}
+
+{% block page_title %}
+    Recommended Courses
+{% endblock page_title %}
+
+{% block main_content %}
+
+{% load static %}
+
+<section class="content">
+    <div class="container-fluid">
+        {% if messages %}
+            <div class="form-group">
+                <div class="col-12">
+                    {% for message in messages %}
+                    {% if message.tags == "error" %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% elif message.tags == "success" %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Course Details</h3>
+                    </div>
+                    <div class="card-body table-responsive p-0">
+                        <table class="table table-hover text-nowrap">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Company</th>
+                                    <th>Level</th>
+                                    <th>Duration</th>
+                                    <th>Domain</th>
+                                    <th>Applied</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for course in recommended_courses %}
+                                <tr>
+                                    <td>{{ course.name }}</td>
+                                    <td>{{ course.company }}</td>
+                                    <td>{{ course.level }}</td>
+                                    <td>{{ course.duration }}</td>
+                                    <td>{{ course.domain }}</td>
+                                    <td>
+                                        {% if course.applied %}
+                                            Applied
+                                        {% else %}
+                                            <button onclick="applyCourse('{{ course.id }}')">Apply</button>
+
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <script>
+        function applyCourse(courseId) {
+            // Send an AJAX request to mark the course as applied.
+            $.ajax({
+                type: "POST",
+                url: "{% url 'apply_course' %}",
+                data: {
+                    course_id: courseId,
+                    csrfmiddlewaretoken: "{{ csrf_token }}",
+                },
+                success: function (data) {
+                    if (data.success) {
+                        // Update the button text and disable it after successful application.
+                        $(`#applyButton_${courseId}`).text("Applied").prop("disabled", true);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error applying for the course:", error);
+                }
+            });
+        }
+    </script>
+{% endblock main_content %}
