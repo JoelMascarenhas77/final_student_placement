@@ -27,6 +27,3 @@ def getdata(request, dict ):
         store.append(request.POST[i])
     return store
 
-
-
-

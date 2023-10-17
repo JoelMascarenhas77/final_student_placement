@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth import login,logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect,HttpResponse
-from datetime import datetime, date, time, timedelta
+from datetime import datetime
 from .models import Feedback,Student,Internship,Certificate,Report
 from django.contrib.auth import get_user_model
 User = get_user_model()

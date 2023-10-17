@@ -64,7 +64,11 @@ class AddStudentForm(forms.Form):
                                   
     
     
-    
+class Edit_Studetnt_Form(AddStudentForm):
+    def visible_fields(self):
+        # Customize the list of visible fields based on your logic
+        visible_fields = ["pid", "first_name", "last_name", "address", "gender", "age", "branch", "semester", "division"]
+        return [self[field] for field in visible_fields]
 
     
     

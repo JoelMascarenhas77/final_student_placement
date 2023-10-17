@@ -17,7 +17,8 @@ urlpatterns = [
     path("admin/manage_course/", admin_views.manage_course, name="manage_course"),
     path("student_home/", stud_views.home, name="student_home"),
     path("admin/prediction/", admin_views.prediction, name="prediction"),
-    path("admin/add_student_file/", admin_views.add_student_file, name="add_student_file"), 
+    path("admin/add_student_file/", admin_views.add_student_file, name="add_student_file"),
+    path("admin/edit_student/<int:student_pid>", admin_views.edit_student, name="edit_student"),  
     path("admin/feedback/", admin_views.feedback, name="admin_feedback"),
 
     path('add_company_file/', admin_views.add_company_file, name='add_company_file'),
@@ -26,7 +27,7 @@ urlpatterns = [
     path("student_home/", stud_views.home, name="student_home"),
     path("student/prediction/", stud_views.prediction, name="student_prediction"),
     path("student/feedback/", stud_views.feedback, name="student_feedback"),
-     path("student/add_certificates/", stud_views.add_certificates, name="add_certificates"),
+    path("student/add_certificates/", stud_views.add_certificates, name="add_certificates"),
 
 ]
 

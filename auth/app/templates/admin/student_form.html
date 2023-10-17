@@ -1,13 +1,16 @@
 <div class="card-body">
                             
                               
-    {% for field in form %}
+    {% for field in form.visible_fields %}
         <div class="form-group">
             {{ field.label_tag }}
             {{ field }} 
         </div>
     {% endfor %%}
 
+
+    
+    
 
 
 

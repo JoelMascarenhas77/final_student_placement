@@ -1,13 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from .forms import AddStudentForm
+from django import forms
+from .forms import AddStudentForm,Edit_Studetnt_Form
 from .models import *
 from . import helpfun
 import pandas as pd
 import pickle
 from .models import Feedback,Company
 from django.http import HttpResponse
+import datetime
 
 User = get_user_model()
 
@@ -99,7 +101,25 @@ def add_student_file(request):
 def manage_student(request):
     students = Student.objects.all() 
     return render(request, "admin/manage.html", {"students": students})
-import pandas as pd
+
+
+def edit_student(request,student_pid):
+    student = Student.objects.get(pid = student_pid)
+    form = Edit_Studetnt_Form()
+
+    form.fields['pid'].initial = student_pid
+    form.fields['first_name'].initial = student.first_name
+    form.fields['last_name'].initial = student.last_name
+    form.fields['address'].initial = student.address
+    form.fields['gender'].initial = student.gender
+    form.fields['age'].initial = student.age
+    form.fields['branch'].initial = student.branch
+    form.fields['semester'].initial = student.semester
+    form.fields['division'].initial = student.division
+   
+    return render(request,"admin/edit_student.html",{"form":form})
+    
+   
 
 def add_company_file(request):
     if request.method == 'POST':
@@ -207,8 +227,7 @@ def delete_student(request, student_pid):
     
     return redirect('manage_student')
 
-def edit_student(request, student_id):
-    pass
+
 
 def prediction(request):
    ''' with open('model.pkl', 'rb') as model_file:
@@ -249,6 +268,7 @@ def feedback(request):
         reply= request.POST['reply']
         feedback = Feedback.objects.get(id = id)
         feedback.reply = reply
+        feedback.updated_at =datetime.now()
         feedback.save()
         return HttpResponse("True")
     return render(request,"admin/feedback.html",{"feedbacks":feedbacks})
