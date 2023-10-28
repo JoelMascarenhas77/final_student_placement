@@ -22,7 +22,7 @@ def user_login(request):
             else:
                  return HttpResponseRedirect('student_home/')
         else:
-            messages.error("user invalid")
+            messages.error(request,"user invalid")
     return render(request,"login.html")
 
 
