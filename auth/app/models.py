@@ -81,7 +81,7 @@ class Prediction(models.Model):
     cgpa = models.DecimalField(max_digits=4, decimal_places=2)
     hostel = models.CharField(max_length=3)
     backlogs = models.IntegerField()
-    results = models.CharField(max_length=30)
+    results = models.DecimalField(max_digits=4, decimal_places=2)
 
 class CourseInternship(models.Model):
     name = models.CharField(max_length=30)

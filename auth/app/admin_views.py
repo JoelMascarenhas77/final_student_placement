@@ -3,12 +3,13 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from .forms import AddStudentForm
 from .models import *
-from django.db.models import Avg, Sum
+from django.db.models import Avg, Sum, Count
 from . import helpfun
 import pandas as pd
-import pickle,joblib
+import joblib
 from django.conf import settings
 from django.http import HttpResponse
+
 
 User = get_user_model()
 def home(request):
@@ -17,9 +18,9 @@ def home(request):
     course_count = CourseInternship.objects.all().count()
 
     # Chart 1: Current Prediction Chart
-    prediction_data = Prediction.objects.values('results').annotate(count=models.Count('results'))
+    prediction_data = Prediction.objects.values('results').annotate(count=Count('results'))
 
-    prediction_labels = ['Positive', 'Negative']
+    prediction_labels = [data['results'] for data in prediction_data]
     prediction_values = [data['count'] for data in prediction_data]
 
     # Chart 2: Available Courses Chart
@@ -239,36 +240,13 @@ def edit_student(request, student_id):
     pass
 
 
-from django.contrib import messages
-from django.shortcuts import render, redirect
-from .models import Student, Report, Prediction
-import joblib
-from django.conf import settings
-
-from django.contrib import messages
-from django.shortcuts import render, redirect
-from .models import Student, Report, Prediction, Certificate
-import joblib
-from django.conf import settings
-from django.db.models import Avg, Sum, Count  # Import the necessary functions
-
-from django.contrib import messages
-from django.shortcuts import render, redirect
-from .models import Student, Report, Prediction, Certificate
-import joblib
-from django.conf import settings
-from django.db.models import Avg, Sum, Count  # Import the necessary functions
-
 def update_prediction(request):
-    # Load the machine learning model (replace 'your_model.pkl' with the actual model file)
     model = joblib.load(settings.MODEL_PATH)
 
     try:
-        # Get all students from the database
         students = Student.objects.all()
         Prediction.objects.filter(student__in=students).delete()
 
-        # Map gender, stream, and hostel to numerical values
         gender_mapping = {'Female': 0, 'Male': 1}
         stream_mapping = {
             'Civil': 1,
@@ -280,30 +258,22 @@ def update_prediction(request):
         }
         hostel_mapping = {'No': 0, 'Yes': 1}
 
-        # Create a list to store prediction results
-        prediction_results = []
-
         for student in students:
             report = Report.objects.filter(key=student)
 
-            # Prepare the input data for prediction
             age = student.age
             gender = gender_mapping.get(student.gender, 0)
             stream = stream_mapping.get(student.branch, 0)
-            
-            # Calculate the average CGPA and sum of backlogs for the student
             cgpa = report.aggregate(Avg('cgpa'))['cgpa__avg']
             backlog = report.aggregate(Sum('backlogs'))['backlogs__sum']
-
-            # Calculate the count of certificates for the student
             internship = Certificate.objects.filter(key=student).aggregate(Count('id'))['id__count']
-
             hostel = hostel_mapping.get(student.hostel, 0)
 
-            # Perform the prediction
-            prediction_result = model.predict([[age, gender, stream, cgpa, backlog, internship, hostel]])
+            prediction_result = model.predict_proba([[age, gender, stream, cgpa, backlog, internship, hostel]])
+            probability_class_1 = prediction_result[0][1]
 
-            # Save the prediction result to the "Prediction" table
+            probable_percentage = max(round(probability_class_1 * 100, 2), 30.0)
+
             prediction = Prediction.objects.create(
                 student=student,
                 age=age,
@@ -313,27 +283,20 @@ def update_prediction(request):
                 backlogs=backlog,
                 hostel=hostel,
                 internship=internship,
-                results=prediction_result[0]  # Assuming the model returns a single result
+                results=probable_percentage
             )
-            prediction_results.append(prediction)
 
-        # Retrieve the predictions to pass to the template
         predictions = Prediction.objects.all()
-
-        # Set a success message
         messages.success(request, "Predictions updated for all students.")
 
     except Student.DoesNotExist:
         messages.error(request, "Student not found.")
 
-    # Pass predictions to the template context
     context = {
         'predictions': predictions
     }
 
     return render(request, 'admin/prediction.html', context)
-
-
 
 def feedback(request):
     feedbacks = Feedback.objects.all()

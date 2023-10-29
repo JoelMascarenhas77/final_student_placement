@@ -4,7 +4,7 @@ from django.contrib.auth import login,logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect,HttpResponse,JsonResponse
 from datetime import datetime, date, time, timedelta
-from .models import Feedback,Student,Certificate,Report,StudentCourseInternship,CourseInternship
+from .models import Feedback,Student,Certificate,Report,StudentCourseInternship,CourseInternship,Prediction
 from django.shortcuts import render, redirect
 from .forms import CertificateForm, ReportForm
 from django.contrib.auth import get_user_model
@@ -14,13 +14,28 @@ User = get_user_model()
 
 def home(request):
     user = request.user.student
-  
+    certifications = Certificate.objects.filter(key=user).count()
+    recCourse = StudentCourseInternship.objects.filter(key=user).count()
+    try:
+        prediction = Prediction.objects.get(student=user)
+        results = prediction.results
+    except Prediction.DoesNotExist:
+        results = None
+    context = {
+        "certifications" : certifications,
+        "results": results,
+        "user" : user,
+        "recCourse" : recCourse,
 
-    return render(request,"student/home.html",{"user":user})
+    }
+
+    return render(request,"student/home.html",context)
  
 def prediction(request):
     user = request.user.student
-    return render(request,"student/prediction.html",{"user":user})
+    prediction = Prediction.objects.get(student=user)
+    results = prediction.results
+    return render(request,"student/prediction.html",{"user":user,"results":results})
 
 def feedback(request):
     
@@ -83,33 +98,51 @@ import random
 def manage_courses(request):
     student = request.user.student
 
-    # Get domains for courses the student has applied for before.
     previous_applications = StudentCourseInternship.objects.filter(key=student)
     previous_domains = [app.domain for app in previous_applications]
 
-    # If the student has previous applications, recommend courses with matching domains.
     if previous_domains:
         recommended_courses = CourseInternship.objects.filter(domain__in=previous_domains).exclude(id__in=previous_applications).order_by('?')[:10]
     else:
-        # If there are no previous applications, recommend random courses.
         recommended_courses = CourseInternship.objects.order_by('?')[:10]
+
+    for course in recommended_courses:
+        student_course, created = StudentCourseInternship.objects.get_or_create(
+            name=course.name,
+            company=course.company,
+            level=course.level,
+            duration=course.duration,
+            domain=course.domain,
+            applied=False,
+            key=student
+        )
 
     context = {'recommended_courses': recommended_courses}
     return render(request, 'student/manage_courses.html', context)
 
 def apply_course(request):
     if request.method == "POST" and request.is_ajax():
-        course_id = request.POST.get("course_id")
+        course_id = request.POST.get("name")
         student = request.user.student
 
-        # Check if the student hasn't already applied for this course.
-        if not StudentCourseInternship.objects.filter(key=student, id=course_id).exists():
-            # Mark the course as applied for the student.
-            student_course = StudentCourseInternship.objects.create(key=student, id=course_id, applied=True)
-            student_course.save()
-            return JsonResponse({'success': True})
+        try:
+            course = StudentCourseInternship.objects.get(id=course_id, key=student)
+        except StudentCourseInternship.DoesNotExist:
+            course = None
+
+        if course:
+            course.applied = not course.applied
+            course.save()
+
+            if course.applied:
+                message = 'You have successfully applied for the course.'
+            else:
+                message = 'You have unapplied for the course.'
+            return JsonResponse({'success': True, 'message': message})
 
     return JsonResponse({'success': False})
+
+
 
 def update_profile_picture(request):
     if request.method == "POST":

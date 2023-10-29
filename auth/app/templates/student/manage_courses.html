@@ -63,8 +63,7 @@
                                         {% if course.applied %}
                                             Applied
                                         {% else %}
-                                            <button onclick="applyCourse('{{ course.id }}')">Apply</button>
-
+                                            <button id="applyButton_{{ course.id }}" data-course-id="{{ course.id }}" onclick="applyCourse(this)">Apply</button>
                                         {% endif %}
                                     </td>
                                 </tr>
@@ -75,26 +74,34 @@
                 </div>
             </div>
         </div>
-    <script>
-        function applyCourse(courseId) {
-            // Send an AJAX request to mark the course as applied.
-            $.ajax({
-                type: "POST",
-                url: "{% url 'apply_course' %}",
-                data: {
-                    course_id: courseId,
-                    csrfmiddlewaretoken: "{{ csrf_token }}",
-                },
-                success: function (data) {
-                    if (data.success) {
-                        // Update the button text and disable it after successful application.
-                        $(`#applyButton_${courseId}`).text("Applied").prop("disabled", true);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error("Error applying for the course:", error);
+    </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    function applyCourse(button) {
+        const courseId = button.getAttribute("data-course-id");
+
+        $.ajax({
+            type: "POST",
+            url: "{% url 'apply_course' %}",
+            data: {
+                name: courseId,
+                csrfmiddlewaretoken: "{{ csrf_token }}",
+            },
+            success: function (data) {
+                if (data.success) {
+                    button.textContent = "Applied";
+                    button.disabled = true;
+                } else {
+                    console.error("Error applying for the course.");
                 }
-            });
-        }
-    </script>
+            },
+            error: function (xhr, status, error) {
+                console.error("Error applying for the course:", error);
+            }
+        });
+    }
+</script>
 {% endblock main_content %}
