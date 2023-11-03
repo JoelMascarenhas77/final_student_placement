@@ -9,6 +9,7 @@ import pandas as pd
 import joblib
 from django.conf import settings
 from django.http import HttpResponse
+from datetime import datetime
 
 
 User = get_user_model()
@@ -305,6 +306,7 @@ def feedback(request):
         reply= request.POST['reply']
         feedback = Feedback.objects.get(id = id)
         feedback.reply = reply
+        feedback.updated_at = datetime.now()
         feedback.save()
         return HttpResponse("True")
     return render(request,"admin/feedback.html",{"feedbacks":feedbacks})
